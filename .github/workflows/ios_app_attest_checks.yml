@@ -1,0 +1,29 @@
+
+name: iOS App Attest Checks
+
+on:
+  push:
+    branches:
+      - feature/ios-app-attest-verifier
+  pull_request:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Install Deno
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+
+      - name: Check TypeScript
+        run: |
+          deno check supabase/functions/_shared/ios_app_attest.ts supabase/functions/_shared/ios_app_attest_test.ts
+
+      - name: Run security input tests
+        run: |
+          deno test supabase/functions/_shared/ios_app_attest_test.ts
