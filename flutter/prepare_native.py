@@ -75,8 +75,7 @@ def apply_ios_native_setup() -> None:
         return match.group('head') + body + match.group('tail')
     block = re.compile(
         r'(?P<head>\t\t[A-F0-9]{24} /\* (?:Debug|Release|Profile) \*/ = \{' 
-        r'\s*isa = XCBuildConfiguration;\s*buildSettings = \{)'
-        r'(?P<body>.*?)'
+r'\s*isa = XCBuildConfiguration;(?:\s*baseConfigurationReference = [^;]+;)?\s*buildSettings = \{)'        r'(?P<body>.*?)'
         r'(?P<tail>\n\s*\};\s*name = (?P<name>Debug|Release|Profile);\s*\};)',
         re.DOTALL,
     )
