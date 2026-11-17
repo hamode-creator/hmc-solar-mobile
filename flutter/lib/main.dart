@@ -305,6 +305,7 @@ class _VerifyPageState extends State<VerifyPage> {
           ),
         ),
       ),
+       ),
     );
   }
 
@@ -604,7 +605,7 @@ class _SerialScannerState extends State<SerialScanner> {
                     await _camera.toggleTorch();
                     if (mounted) setState(() => _torch = !_torch);
                   } catch (_) {
-                    if (!mounted) return;
+                    if (!context.mounted) return;
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(content: Text(widget.arabic
                           ? 'المصباح غير متاح على هذا الجهاز.'

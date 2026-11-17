@@ -34,7 +34,9 @@ String? normalizeScannedSerial(String raw) {
   var candidate = raw.trim();
   // QR codes may contain web links. We never infer a serial from a URL.
   if (RegExp(r'^[a-z][a-z0-9+.-]*://', caseSensitive: false)
-      .hasMatch(candidate)) return null;
+    .hasMatch(candidate)) {
+  return null;
+}
   final labelled = RegExp(r'^\s*(?:S\s*[/.-]?\s*N|SERIAL(?:\s+NUMBER)?)\s*[:=#]\s*(.+?)\s*$',
       caseSensitive: false).firstMatch(candidate);
   if (labelled != null) candidate = labelled.group(1)!;
