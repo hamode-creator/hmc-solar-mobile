@@ -1,0 +1,40 @@
+# HMC Solar - iOS source validation workflow.
+# This does NOT sign the app or publish to TestFlight.
+# Enable signed release only after Apple App Attest verification is operational.
+workflows:
+  hmc-ios-validation:
+    name: HMC Solar - iOS unsigned validation
+    instance_type: mac_mini_m2
+    max_build_duration: 60
+    environment:
+      flutter: 3.47.9
+      xcode: latest
+      cocoapods: default
+    scripts:
+      - name: Generate Flutter native project
+        script: |
+          cd flutter
+          python3 prepare_native.py
+      - name: Resolve Flutter packages
+        script: |
+          cd flutter
+          flutter pub get
+      - name: Generate launcher icons
+        script: |
+          cd flutter
+          dart run flutter_launcher_icons
+      - name: Analyze Dart and Flutter code
+        script: |
+          cd flutter
+          flutter analyze
+      - name: Run unit and widget tests
+        script: |
+          cd flutter
+          flutter test
+      - name: Build unsigned iOS application
+        script: |
+          cd flutter
+          flutter build ios --release --no-codesign --dart-define=IOS_ATTEST_ENABLED=false
+    artifacts:
+      - flutter/build/ios/iphoneos/*.app
+      - /tmp/xcodebuild_logs/*.log

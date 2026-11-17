@@ -1,0 +1,32 @@
+# Generated build artifacts and tools
+**/.dart_tool/
+**/.packages
+**/.flutter-plugins
+**/.flutter-plugins-dependencies
+**/build/
+**/coverage/
+**/.idea/
+**/.vscode/
+**/ios/Pods/
+**/ios/.symlinks/
+**/android/.gradle/
+**/android/local.properties
+**/ios/Flutter/Generated.xcconfig
+**/ios/Flutter/flutter_export_environment.sh
+*.log
+*.DS_Store
+
+# Never commit credentials, signing profiles, or environment secrets
+.env
+.env.*
+*.p8
+*.p12
+*.mobileprovision
+*.cer
+*.pem
+*.key
+*.jks
+*.keystore
+key.properties
+GoogleService-Info.plist
+service-account*.json
