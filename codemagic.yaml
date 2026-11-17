@@ -84,10 +84,10 @@ workflows:
           flutter build ipa --release \
             --dart-define=IOS_ATTEST_ENABLED=false \
             --export-options-plist=/Users/builder/export_options.plist
+    
     artifacts:
       - flutter/build/ios/ipa/*.ipa
       - /tmp/xcodebuild_logs/*.log
-      publishing:
+    publishing:
       app_store_connect:
         auth: integration
-
