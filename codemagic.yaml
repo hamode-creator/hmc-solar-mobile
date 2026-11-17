@@ -1,6 +1,7 @@
-# HMC Solar - iOS source validation workflow.
-# This does NOT sign the app or publish to TestFlight.
-# Enable signed release only after Apple App Attest verification is operational.
+# HMC Solar - iOS build workflows.
+# Unsigned validation and signed IPA builds.
+# iOS serial verification remains disabled until
+# server-side Apple App Attest verification is operational.
 workflows:
   hmc-ios-validation:
     name: HMC Solar - iOS unsigned validation
@@ -38,3 +39,50 @@ workflows:
     artifacts:
       - flutter/build/ios/iphoneos/*.app
       - /tmp/xcodebuild_logs/*.log
+
+
+  hmc-ios-signed:
+    name: HMC Solar - iOS signed IPA
+    instance_type: mac_mini_m2
+    max_build_duration: 60
+    environment:
+      flutter: 3.47.9
+      xcode: latest
+      cocoapods: default
+      ios_signing:
+        certificates:
+          - HMC_Solar_Distribution
+        provisioning_profiles:
+          - HMC_Solar_AppStore_Profile
+    scripts:
+      - name: Generate Flutter native project
+        script: |
+          cd flutter
+          python3 prepare_native.py
+      - name: Resolve Flutter packages
+        script: |
+          cd flutter
+          flutter pub get
+      - name: Generate launcher icons
+        script: |
+          cd flutter
+          dart run flutter_launcher_icons
+      - name: Analyze and test
+        script: |
+          cd flutter
+          flutter analyze
+          flutter test
+      - name: Set up iOS signing
+        script: |
+          cd flutter
+          xcode-project use-profiles
+      - name: Build signed iOS IPA
+        script: |
+          cd flutter
+          flutter build ipa --release \
+            --dart-define=IOS_ATTEST_ENABLED=false \
+            --export-options-plist=/Users/builder/export_options.plist
+    artifacts:
+      - flutter/build/ios/ipa/*.ipa
+      - /tmp/xcodebuild_logs/*.log
+
