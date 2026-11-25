@@ -27,3 +27,7 @@ jobs:
       - name: Run security input tests
         run: |
           deno test --allow-env=HMC_ADMIN_ORIGIN supabase/functions/_shared/ios_app_attest_test.ts supabase/functions/_shared/ios_check_test.ts
+
+      - name: Verify staging rejects unauthenticated malformed requests
+        run: |
+          deno test --allow-net=uyinxppcgcnhfzxwqtzi.supabase.co supabase/tests/staging_smoke_test.ts
