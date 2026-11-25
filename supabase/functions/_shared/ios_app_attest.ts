@@ -59,6 +59,11 @@ export async function verifyIosRegistration(
   };
 }
 
+/** Exact UTF-8 bytes signed by the iOS app for a one-time serial lookup. */
+export function iosBoundClientData(challengeId: string, challenge: string, serial: string): string {
+  return `HMC_VERIFY_V1\n${challengeId}\n${challenge}\n${serial}`;
+}
+
 // Verify an assertion against a previously attested key.
 // Challenge ID and challenge must be loaded from the server database.
 export async function verifyIosRequest(
@@ -99,8 +104,7 @@ export async function verifyIosRequest(
   const publicKeyPem =
     `-----BEGIN PUBLIC KEY-----\n${lines}\n-----END PUBLIC KEY-----\n`;
 
-  const trustedClientData =
-    `HMC_VERIFY_V1\n${challengeId}\n${storedChallenge}\n${serial}`;
+  const trustedClientData = iosBoundClientData(challengeId, storedChallenge, serial);
 
   const result = await verifyAssertion(
     { appId: APP_ID },
