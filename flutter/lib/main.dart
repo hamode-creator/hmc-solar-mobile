@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'verify_service.dart';
 
@@ -162,6 +163,27 @@ class _VerifyPageState extends State<VerifyPage> {
     }
     _serial.text = candidate;
     _clearResult();
+  }
+
+  static final Uri _privacyPolicyUrl =
+      Uri.parse('https://hamode-creator.github.io/hmc-solar-mobile/privacy/');
+
+  Future<void> _openPrivacyPolicy() async {
+    bool opened = false;
+    try {
+      opened = await launchUrl(_privacyPolicyUrl,
+          mode: LaunchMode.externalApplication);
+    } catch (_) {
+      opened = false;
+    }
+    if (!opened && mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(tr(
+          'تعذر فتح سياسة الخصوصية. حاول مرة أخرى.',
+          'Could not open the privacy policy. Please try again.',
+        ))),
+      );
+    }
   }
 
   Future<void> _scan() async {
@@ -554,6 +576,12 @@ class _VerifyPageState extends State<VerifyPage> {
               textAlign: TextAlign.center,
               style: const TextStyle(
                   color: _subtle, fontSize: 11.5, height: 1.7),
+            ),
+            const SizedBox(height: 8),
+            TextButton.icon(
+              onPressed: _openPrivacyPolicy,
+              icon: const Icon(Icons.open_in_new, size: 16),
+              label: Text(tr('قراءة سياسة الخصوصية', 'Read privacy policy')),
             ),
           ],
         ),
