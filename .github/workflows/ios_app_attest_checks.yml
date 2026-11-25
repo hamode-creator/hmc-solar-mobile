@@ -22,7 +22,7 @@ jobs:
 
       - name: Check TypeScript
         run: |
-          deno check supabase/functions/_shared/common.ts supabase/functions/_shared/ios_app_attest.ts supabase/functions/_shared/ios_app_attest_test.ts supabase/functions/register-ios/index.ts
+          deno check supabase/functions/_shared/common.ts supabase/functions/_shared/ios_app_attest.ts supabase/functions/_shared/ios_app_attest_test.ts supabase/functions/register-ios/index.ts supabase/functions/_shared/ios_check.ts supabase/functions/check-serial/index.ts
 
       - name: Run security input tests
         run: |
