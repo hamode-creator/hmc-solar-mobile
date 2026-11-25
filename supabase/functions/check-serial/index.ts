@@ -23,7 +23,7 @@ async function db(path:string,method:string,body?:unknown,extra:Record<string,st
   return text?JSON.parse(text):null;
 }
 async function hash(bytes:Uint8Array):Promise<Uint8Array>{
-  return new Uint8Array(await crypto.subtle.digest("SHA-256",bytes));
+  return new Uint8Array(await crypto.subtle.digest("SHA-256",new Uint8Array(bytes).buffer));
 }
 const utf8=(s:string)=>new TextEncoder().encode(s);
 const b64url=(bytes:Uint8Array)=>btoa(String.fromCharCode(...bytes)).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/g,"");
