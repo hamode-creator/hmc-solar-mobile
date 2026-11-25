@@ -35,3 +35,7 @@ jobs:
       - name: Verify production iOS canary refuses untrusted requests
         run: |
           deno test --allow-net=obloojlkjnagpdokofgw.supabase.co supabase/tests/production_ios_canary_test.ts
+
+      - name: Verify production registration rejects unknown attestations
+        run: |
+          deno test --allow-net=obloojlkjnagpdokofgw.supabase.co supabase/tests/production_registration_smoke_test.ts
