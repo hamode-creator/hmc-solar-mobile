@@ -2,6 +2,7 @@ import 'package:app_attest/app_attest.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
+import 'config.dart';
 import 'ios_challenge.dart';
 
 /// The iOS Keychain can outlive an app reinstall, while Apple's App Attest
@@ -29,7 +30,10 @@ class IosAppAttestClient {
   final Future<Map<String, dynamic>> Function(
       String endpoint, Map<String, dynamic> body) post;
 
-  static const _keyField = 'hmc_ios_app_attest_key_id_v1';
+  // A key registered with the staging backend is not registered with production.
+  // Namespace the keychain value by trusted, compile-time backend hostname.
+  static String get _keyField =>
+      'hmc_ios_app_attest_key_id_v2_${Uri.parse(HmcConfig.supabaseUrl).host}';
   Future<String>? _registrationInFlight;
   final FlutterSecureStorage _secureStore = const FlutterSecureStorage();
 
