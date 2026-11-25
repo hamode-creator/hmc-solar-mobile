@@ -39,3 +39,7 @@ jobs:
       - name: Verify production registration rejects unknown attestations
         run: |
           deno test --allow-net=obloojlkjnagpdokofgw.supabase.co supabase/tests/production_registration_smoke_test.ts
+
+      - name: Verify deployed production serial-check rejects spoofed requests
+        run: |
+          deno test --allow-net=obloojlkjnagpdokofgw.supabase.co supabase/tests/production_check_serial_smoke_test.ts
