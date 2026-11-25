@@ -1,0 +1,45 @@
+
+name: iOS App Attest Checks
+
+on:
+  push:
+    branches:
+      - feature/ios-app-attest-verifier
+  pull_request:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Install Deno
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+
+      - name: Check TypeScript
+        run: |
+          deno check supabase/functions/_shared/common.ts supabase/functions/_shared/ios_app_attest.ts supabase/functions/_shared/ios_app_attest_test.ts supabase/functions/register-ios/index.ts supabase/functions/_shared/ios_check.ts supabase/functions/check-serial/index.ts
+
+      - name: Run security input tests
+        run: |
+          deno test --allow-env=HMC_ADMIN_ORIGIN supabase/functions/_shared/ios_app_attest_test.ts supabase/functions/_shared/ios_check_test.ts
+
+      - name: Verify staging rejects unauthenticated malformed requests
+        run: |
+          deno test --allow-net=uyinxppcgcnhfzxwqtzi.supabase.co supabase/tests/staging_smoke_test.ts
+
+      - name: Verify production iOS canary refuses untrusted requests
+        run: |
+          deno test --allow-net=obloojlkjnagpdokofgw.supabase.co supabase/tests/production_ios_canary_test.ts
+
+      - name: Verify production registration rejects unknown attestations
+        run: |
+          deno test --allow-net=obloojlkjnagpdokofgw.supabase.co supabase/tests/production_registration_smoke_test.ts
+
+      - name: Verify deployed production serial-check rejects spoofed requests
+        run: |
+          deno test --allow-net=obloojlkjnagpdokofgw.supabase.co supabase/tests/production_check_serial_smoke_test.ts

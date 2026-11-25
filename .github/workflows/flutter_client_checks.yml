@@ -1,0 +1,29 @@
+name: Flutter iOS client checks
+
+on:
+  push:
+    branches:
+      - feature/ios-app-attest-verifier
+  pull_request:
+
+jobs:
+  flutter-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.47.9'
+          channel: stable
+          cache: true
+      - name: Resolve packages
+        working-directory: flutter
+        run: flutter pub get
+      - name: Analyze Flutter code
+        working-directory: flutter
+        run: flutter analyze
+      - name: Test Flutter client
+        working-directory: flutter
+        run: flutter test
