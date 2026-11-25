@@ -5,6 +5,15 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'config.dart';
 import 'ios_challenge.dart';
 
+/// Keep each App Attest key bound to the Supabase project that registered it.
+String iosAttestStorageKeyForBackend(String backendUrl) {
+  final uri = Uri.parse(backendUrl);
+  if (uri.scheme != 'https' || uri.host.isEmpty) {
+    throw ArgumentError.value(backendUrl, 'backendUrl', 'Expected HTTPS endpoint');
+  }
+  return 'hmc_ios_app_attest_key_id_v2_${uri.host}';
+}
+
 /// The iOS Keychain can outlive an app reinstall, while Apple's App Attest
 /// Secure Enclave key does not. An invalid cached key must be discarded and
 /// attested again; never fall back to an unauthenticated serial lookup.
@@ -33,7 +42,7 @@ class IosAppAttestClient {
   // A key registered with the staging backend is not registered with production.
   // Namespace the keychain value by trusted, compile-time backend hostname.
   static String get _keyField =>
-      'hmc_ios_app_attest_key_id_v2_${Uri.parse(HmcConfig.supabaseUrl).host}';
+      iosAttestStorageKeyForBackend(HmcConfig.supabaseUrl);
   Future<String>? _registrationInFlight;
   final FlutterSecureStorage _secureStore = const FlutterSecureStorage();
 
