@@ -93,7 +93,7 @@ workflows:
         auth: integration
 
   hmc-ios-staging:
-    name: HMC Solar - signed iOS staging IPA (no publishing)
+    name: HMC Solar - iOS staging TestFlight internal
     integrations:
       app_store_connect: HMC Solar Codemagic
     instance_type: mac_mini_m2
