@@ -31,3 +31,7 @@ jobs:
       - name: Verify staging rejects unauthenticated malformed requests
         run: |
           deno test --allow-net=uyinxppcgcnhfzxwqtzi.supabase.co supabase/tests/staging_smoke_test.ts
+
+      - name: Verify production iOS canary refuses untrusted requests
+        run: |
+          deno test --allow-net=obloojlkjnagpdokofgw.supabase.co supabase/tests/production_ios_canary_test.ts
