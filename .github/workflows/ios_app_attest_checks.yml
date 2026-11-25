@@ -26,4 +26,4 @@ jobs:
 
       - name: Run security input tests
         run: |
-          deno test supabase/functions/_shared/ios_app_attest_test.ts
+          deno test supabase/functions/_shared/ios_app_attest_test.ts supabase/functions/_shared/ios_check_test.ts
